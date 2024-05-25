@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="../../../static/fontawesome/css/all.min.css">
+    <link href="../../../static/css/investigations_tasks.css" type="text/css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <div class="company-logo" id="company-logo">
+        <h3>Siphelele Makhathini</h3>
+      </div>
+      <header class="heading" id="heading">
+        <h1>Quality Control Management System</h1>
+        <h4>ISO 9001 / ISO 17025 </h4>
+      </header>
+      <div class="sidebar" id="sidebar">
+        <nav class="nav-container" id="nav-container">
+          <ul>
+            <li class="nav-items"><i class="fa-solid fa-house-chimney"></i><span> Overview</span></li>
+            <li class="nav-items"><i class="fa-solid fa-graduation-cap"></i><span> Investigations</span></li>
+            <li class="nav-items"><i class="fa-solid fa-clipboard-check"></i><span> Audits</span></li>
+            <li class="nav-items"><i class="fa-solid fa-list-check"></i><span> Tasks</span></li>
+            <li class="nav-items"><i class="fa-solid fa-award"></i><span> Complience</span></li>
+            <li class="nav-items"><i class="fa-solid fa-calendar-days"></i><span> Schedule</span></li>
+          </ul>
+        </nav>
+      </div>
+      
+      <div class="content-panel-1" id="content-panel-1">
+        <h1>List of Investigations</h1>
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.investigation.ir_number.label }} {{ form.investigation.ir_number(class_="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.investigation.raised_by.label }} {{ form.investigation.raised_by(class_="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.investigation.line_manager.label }} {{ form.investigation.line_manager(class_="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.investigation.priority.label }} {{ form.investigation.priority(class_="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.investigation.team_leader.label }} {{ form.investigation.team_leader(class_="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.investigation.description.label }} {{ form.investigation.description(class_="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.investigation.root_cause_summary.label }} {{ form.investigation.root_cause_summary(class_="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.investigation.ir_source.label }} {{ form.investigation.ir_source(class_="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.investigation.due_date.label }} {{ form.investigation.due_date(class_="form-control") }}
+            </div>
+            <h3>Investigation Details</h3>
+            <div id="details">
+                {% for detail in form.details %}
+                <div class="form-group detail-entry">
+                    {{ detail.main_causes.label }} {{ detail.main_causes(class_="form-control") }}
+                    {{ detail.steps_required.label }} {{ detail.steps_required(class_="form-control") }}
+                    {{ detail.by_who.label }} {{ detail.by_who(class_="form-control") }}
+                    {{ detail.due_date.label }} {{ detail.due_date(class_="form-control") }}
+                    {{ detail.date_completed.label }} {{ detail.date_completed(class_="form-control") }}
+                    <button type="button" class="btn btn-danger remove-detail">Remove</button>
+                </div>
+                {% endfor %}
+            </div>
+            <button type="button" class="btn btn-primary" id="add-detail">Add Detail</button>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+        
+      </div>
+      <footer>
+        <ul>
+          <li><p>All Rights Reserved</p><span></span></li>
+          <li><p>Privacy Policy</p><span></span></li>
+          <li><p>Terms of Service</p></li>
+        </ul>
+      </footer>
+    </div>
+  </body>
+</html>

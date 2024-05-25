@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="../../../static/fontawesome/css/all.min.css">
+    <link href="../../../static/css/investigations.css" type="text/css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <div class="company-logo" id="company-logo">
+        <h3>Siphelele Makhathini</h3>
+      </div>
+      <header class="heading" id="heading">
+        <h1>Quality Control Management System</h1>
+        <h4>ISO 9001 / ISO 17025 </h4>
+      </header>
+      <div class="sidebar" id="sidebar">
+        <nav class="nav-container" id="nav-container">
+          <ul>
+            <li class="nav-items"><i class="fa-solid fa-house-chimney"></i><span> Overview</span></li>
+            <li class="nav-items"><i class="fa-solid fa-graduation-cap"></i><span> Investigations</span></li>
+            <li class="nav-items"><i class="fa-solid fa-clipboard-check"></i><span> Audits</span></li>
+            <li class="nav-items"><i class="fa-solid fa-list-check"></i><span> Tasks</span></li>
+            <li class="nav-items"><i class="fa-solid fa-award"></i><span> Complience</span></li>
+            <li class="nav-items"><i class="fa-solid fa-calendar-days"></i><span> Schedule</span></li>
+          </ul>
+        </nav>
+      </div>
+      
+      <div class="content-panel-1" id="content-panel-1">
+        <div class="inv-heading">
+          <div class="inv-heading titlee">
+            <h2>Investigations</h2>
+          </div>
+          <div class="inv-heading buttons">
+            <button type=""> Create New </button>
+          </div>
+        </div>
+        <div class="inv-table">
+          <table class="table table-boardered">
+            <thead>
+              <tr>
+                <th>IR No.</th>
+                <th>Date Opened</th>
+                <th>Line Manager</th>
+                <th>Description</th>
+                <th>Summary of Root Causes</th>
+                <th>Due State</th>
+                <th>Source</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for investiogation in investigations %}
+              <tr>
+                <td>{{ investigations.ir_number }}</td>
+                <td>{{ investigations.date_created_on }}</td>
+                <td>{{ investigations.line_manager }}</td>
+                <td>{{ investigations.description }}</td>
+                <td>{{ investigations.root_cause_summary }}</td>
+                <td>{{ investigations.due_date }}</td>
+                <td>{{ investigations.ir_source }}</td>
+                <td>{{ investigations.status }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <footer>
+        <ul>
+          <li><p>All Rights Reserved</p><span></span></li>
+          <li><p>Privacy Policy</p><span></span></li>
+          <li><p>Terms of Service</p></li>
+        </ul>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/index.css">
+    <title>Sign-In or Sign-Up</title>
+  </head>
+  <body>
+    <div class="container" id="container">
+      <div class="form-container sign-up" id="form-container sign-up">
+        <form action="/signup" method="post">
+          <h1>Create Account</h1>
+          <div class="social-icons">
+            <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+            <a href="#" class="icon"><i class="fa-brands fa-google"></i></a>
+          </div>
+          <span>or use your email for registration</span>
+          <input type="text" name="name" placeholder="Name">
+          <input type="text" name="surname" placeholder="Surname">
+          <input type="email" name="email" placeholder="Email">
+          <input type="password" name="password" placeholder="Password">
+          <input type="password" name="confirm-Password" placeholder="Confirm Password">
+          <button type="">Sign-up</button>
+        </form>
+      </div>
+
+      <div class="form-container sign-in" id="form-container sign-in">
+        <form action="/login" method="POST">
+          <h1>Sign In</h1>
+          <div class="social-icons">
+            <a href="/github_login" class="icon"><i class="fa-brands fa-github"></i></a>
+            <a href="/google_login" class="icon"><i class="fa-brands fa-google"></i></a>
+          </div>
+          <span>or use your email and password</span>
+          <input type="email" name="email" placeholder="Email">
+          <input type="password" name="password" placeholder="Password">
+          <button type="">Sign In</button>
+        </form>
+      </div>
+
+      <div class="toggle-container">
+        <div class="toggle">
+          <div class="toggle-panel toggle-left">
+            <h1>Welcome Back!</h1>
+            <p>Enter your credentials to use this site</p>
+            <button class="hidden" id="login">Sign In</button>
+          </div>
+          <div class="toggle-panel toggle-right">
+            <h1>Hello, Friend</h1>
+            <p>Register with us to use all the features of this site</p>
+            <button class="hidden" id="register">Sign-Up</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    
+    <script src="../static/js/index.js"></script>
+  </body>
+</html>
