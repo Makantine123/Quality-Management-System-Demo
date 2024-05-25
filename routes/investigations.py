@@ -17,6 +17,23 @@ def investigations_list():
                            investiagtions=investiagtions)
 
 
+@inv_views.route('/investigations/<ir_number>', methods=['POST', 'GET'])
+def investigation_details(ir_number):
+    """ Render Template With Investigation and its details """
+    from app import Session
+    db = Session()
+    if ir_number:
+        details = db.query(InvestigationsDetails).all()
+        investigation = db.query(Investigations).first()
+        return render_template(
+            'dashboard/investigations/investigations_details.html',
+            investigation=investigation, invetigationdetails=details)
+
+    return redirect(url_for('home'))
+
+
+
+
 @inv_views.route('/investigations/new', methods=['GET', 'POST'])
 def new_investigation():
     """ Save new investigation """
