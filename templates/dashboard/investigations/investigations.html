@@ -53,16 +53,16 @@
               </tr>
             </thead>
             <tbody>
-              {% for investiogation in investigations %}
+              {% for investigation in investigations %}
               <tr>
-                <td>{{ investigations.ir_number }}</td>
-                <td>{{ investigations.date_created_on }}</td>
-                <td>{{ investigations.line_manager }}</td>
-                <td>{{ investigations.description }}</td>
-                <td>{{ investigations.root_cause_summary }}</td>
-                <td>{{ investigations.due_date }}</td>
-                <td>{{ investigations.ir_source }}</td>
-                <td>{{ investigations.status }}</td>
+                <td>{{ investigation.ir_number }}</td>
+                <td>{{ investigation.date_created_on }}</td>
+                <td>{{ investigation.line_manager }}</td>
+                <td>{{ investigation.description }}</td>
+                <td>{{ investigation.root_cause_summary }}</td>
+                <td>{{ investigation.due_date }}</td>
+                <td>{{ investigation.ir_source }}</td>
+                <td>{{ investigation.status }}</td>
               </tr>
               {% endfor %}
             </tbody>

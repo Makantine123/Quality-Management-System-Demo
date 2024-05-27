@@ -30,8 +30,129 @@
       </div>
       
       <div class="content-panel-1" id="content-panel-1">
-        <h1>List of Investigations</h1>
+        <form action="#">
+          <div class="inv-heading-title">
+            <h2>Task</h2>
+            <button type="">Go Back / Close</button>
+            <button type="submit">SAVE</button>
+          </div>
+          <div class="form-container">
+          <div class="form-group" id="id">
+            <label for="id">ID.</label>
+            <input type="text" name="id" value="{{ task.id }}" disabled>
+          </div>
+           <div class="form-group">
+            <label for="investigation_id">Investigation ID</label>
+            <input type="text" name="investigation_id" value="{{ task.investigation_id }}" disabled>
+          </div>
+         <div class="form-group">
+            <label for="investigationsdetail_id">Details ID</label>
+            <input type="text" name="investigationsdetail_id" value="{{ task.investigationsdetail_id }}" disabled>
+          </div>
+          <div class="form-group" id="assign_to">
+            <label for="assign_to">Assign To</label>
+            <input type="text" name="assign_to" value="{{ task.assign_to }}">
+          </div>
+           <div class="form-group" id="status">
+            <label for="status">Status</label>
+             <select id="status" name="status">
+              <option value="Registered" {% if task.status == 'Registered' %}selected{% endif %}>Registed</option>
+              <option value="In Progress" {% if task.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+              <option value="Completed" {% if task.status == 'Completed' %}selected{% endif %}>Completed</option>
+              <option value="Approved" {% if task.status == 'Approved' %}selected{% endif %}>Approved</option>
+              <option value="Rejected" {% if task.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+              <option value="Overdue" {% if task.status == 'Overdue' %}selected{% endif %}>Overdue</option>
+            </select>
+          </div>
+          <div class="form-group" id="due_date">
+            <label for="due_date">Due Date</label>
+            <input type="datetime-local" name="due_date" value="{{ task.due_date }}">
+          </div>
+       <div class="form-group" id="date_updated_on" >
+            <label for="date_updated_on">Updated On</label>
+            <input type="datetime-local" name="date_updated_on" value="{{ task.date_updated_on }}">
+          </div>
+          <div class="form-group" id="date_created_on" >
+            <label for="date_created_on">Date Created</label>
+            <input type="datetime-local" name="team_leader" value="{{ investigations.date_created_on }}" disabled>
+          </div>
+           <div class="form-group" id="description" >
+            <label for="description">Description</label>
+            <textarea type="text" name="description">{{ task.description }}</textarea>
+          </div>
+        </div>
+        </form>
       </div>
+
+      <div class="content-panel-2">
+        <div class="inv-heading-title">
+          <h2>Task List</h2>
+        </div>
+      </div>
+      
+      <div class="content-panel-3">
+        <form action="#" method="post" enctype="multipart/form-data">
+          <div class="inv-heading-title">
+            <h2>Task Details</h2>
+            <button type="">Add New</button>
+            <button type="submit">SAVE</button>
+          </div>
+           <div class="form-group">
+            <label for="id">ID.</label>
+            <input type="text" name="id" value="{{ taskdetails.id }}" disabled>
+          </div>
+         <div class="form-group">
+            <label for="task_id">Task ID</label>
+            <input type="text" name="task_id" value="{{ taskdetails.task_id }}" disabled>
+          </div>
+          <div class="form-group">
+            <label for="">Date Created</label>
+            <input type="datetime-local" name="id" value="{{ taskdetails.date_created_on }}" disabled>
+          </div>
+          <div class="form-group">
+            <label for="">Updated On</label>
+            <input type="datetime-local" name="id" value="{{ taskdetails.date_updated_on }}" disabled>
+          </div>
+          <div class="form-group">
+            <label for="status">Status</label>
+             <select id="status" name="status">
+              <option value="Registered" {% if taskdetails.status == 'Registered' %}selected{% endif %}>Registed</option>
+              <option value="In Progress" {% if taskdetails.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+              <option value="Completed" {% if taskdetails.status == 'Completed' %}selected{% endif %}>Completed</option>
+              <option value="Approved" {% if taskdetails.status == 'Approved' %}selected{% endif %}>Approved</option>
+              <option value="Rejected" {% if taskdetails.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+              <option value="Overdue" {% if taskdetails.status == 'Overdue' %}selected{% endif %}>Overdue</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="">Investigation ID</label>
+            <input type="" name="investigation_id" value="{{ taskdetails.investigation_id }}" disabled>
+          </div>
+           <div class="form-group">
+            <label for="date_completed_on">Completed On</label>
+            <input type="datetime-local" name="date_completed_on" value="{{ taskdetails.date_completed_on }}">
+          </div>
+         <div class="form-group">
+            <label for="attachment_name">Attachment</label>
+            <input type="file" id="file" name="attachment_name" multiple="False" value="{{ taskdetails.attachment_name }}">
+          </div>
+          <div class="form-group">
+            <label for="attachment_comments">Attachment Comments</label>
+            <textarea type="" name="attachment_comments">{{ taskdetails.attachment_comments }}</textarea>
+          </div>
+           <div class="form-group" id="feedback">
+            <label for="">Feedback Comments</label>
+            <textarea type="" name="feedback">{{ taskdetails.feedback }}</textarea>
+          </div>
+       </form>
+      </div>
+
+      <div class="content-panel-4">
+        <div class="inv-heading-title">
+          <h2>Comments</h2> 
+        </div>
+      </div>
+
       <footer>
         <ul>
           <li><p>All Rights Reserved</p><span></span></li>
@@ -39,6 +160,7 @@
           <li><p>Terms of Service</p></li>
         </ul>
       </footer>
+
     </div>
   </body>
 </html>

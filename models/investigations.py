@@ -40,3 +40,12 @@ class Investigations(BaseModel):
             ir_number = f"{current_year}-001"
 
         return ir_number
+
+
+def before_insert_listener(mapper, connection, target):
+    """ Sets the ir_number before insert """
+    if target.ir_number is None:
+        target.ir_number = target.generate_ir_no()
+
+
+event.listen(Investigations, 'before_insert', before_insert_listener)

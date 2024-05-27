@@ -12,9 +12,10 @@ def investigations_list():
     """ Render Investigations Lists Template """
     from app import Session
     db = Session()
-    investiagtions = db.query(Investigations).all()
+    investigations = db.query(Investigations).all()
+    print(investigations)
     return render_template('dashboard/investigations/investigations.html',
-                           investiagtions=investiagtions)
+                           investigations=investigations)
 
 
 @inv_views.route('/investigations/<ir_number>', methods=['POST', 'GET'])
@@ -27,11 +28,9 @@ def investigation_details(ir_number):
         investigation = db.query(Investigations).first()
         return render_template(
             'dashboard/investigations/investigations_details.html',
-            investigation=investigation, invetigationdetails=details)
+            investigations=investigation, details=details)
 
-    return redirect(url_for('home'))
-
-
+    return redirect(url_for('investigations_list'))
 
 
 @inv_views.route('/investigations/new', methods=['GET', 'POST'])

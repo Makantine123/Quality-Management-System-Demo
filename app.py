@@ -8,7 +8,8 @@ from flask_cors import CORS
 from models.base_model import BaseModel
 from routes.auth import auth_views, github_blueprint, google_blueprint
 from routes.dashboard import dash_views
-from routes.investigations import inv_views
+from routes.inv import inv_views
+from routes.tsk import tsk_views
 from config import Config
 
 
@@ -29,6 +30,7 @@ def register_all_blueprints(app):
     app.register_blueprint(auth_views)
     app.register_blueprint(dash_views)
     app.register_blueprint(inv_views)
+    app.register_blueprint(tsk_views)
     app.register_blueprint(github_blueprint)
     app.register_blueprint(google_blueprint)
 
