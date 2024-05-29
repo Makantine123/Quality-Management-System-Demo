@@ -184,7 +184,7 @@ body {
 }
 
 th {
-	
+	text-align: left;
 }
 
 th:nth-child(1) {

@@ -59,7 +59,7 @@
                 <td>{{ investigation.root_cause_summary }}</td>
                 <td>{{ investigation.due_date | format_date('%Y-%m-%d') }}</td>
                 <td>{{ investigation.status }}</td>
-                <td><i class="fa-solid fa-trash-can"></i></td>
+                <td><a href="{{ url_for('inv_views.delete_investigation', ir_number=investigation.ir_number) }}"><i class="fa-solid fa-trash-can"></i></a></td>
               </tr>
               {% endfor %}
             </tbody>

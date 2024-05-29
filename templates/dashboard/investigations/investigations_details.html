@@ -186,7 +186,7 @@
       <div class="content-panel-4">
         <div class="inv-heading-title">
           <h2>Investigation Tasks</h2> 
-          <button type="submit">Add New</button>
+          <button type="button" id="add-new-task-btn" onclick="{{ url_for() }}"  {% if investigations.id is none %}disabled{% endif %}>Add New</button>
         </div>
         <div class="task-container">
           <h3>tasklist</h3>

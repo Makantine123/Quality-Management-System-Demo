@@ -1,7 +1,7 @@
 """ Investigations Routees """
 from flask import Blueprint, render_template, flash, request, url_for, redirect
 from sqlalchemy import desc
-from sqlalchemy.util import duck_type_collection
+from sqlalchemy.util import duck_type_collection, unbound_method_to_callable
 from models.investigations import Investigations
 from models.investigations_details import InvestigationsDetails
 from models.tasks import Tasks
@@ -15,7 +15,7 @@ def investigations_list():
     """ Render Investigations Lists Template """
     from app import Session
     db = Session()
-    investigations = db.query(Investigations).all()
+    investigations = db.query(Investigations).filter(Investigations.status!="Rejected").all()
     print(investigations)
     return render_template('dashboard/investigations/investigations.html',
                            investigations=investigations)
@@ -43,6 +43,19 @@ def investigation_details(ir_number):
             'dashboard/investigations/investigations_details.html',
             investigations=investigation, details=details,
             detailslist=detailslist, tasklist=tasklist)
+
+
+@inv_views.route('/investigations/<ir_number>/delete', methods=['POST', 'GET'])
+def delete_investigation(ir_number):
+    """ Soft Deletes Investigation by ir_number """
+    from app import Session
+    db = Session()
+    investigation = db.query(Investigations).filter_by(
+        ir_number=ir_number).first()
+    if investigation:
+        investigation.status = "Rejected"
+        db.commit()
+    return redirect(url_for('inv_views.investigations_list'))
 
 
 @inv_views.route('/investigations/save_new', methods=['GET', 'POST'])
@@ -137,3 +150,10 @@ def save_investigation_detail():
 
     return redirect(url_for('inv_views.investigation_details',
                             ir_number=ir_number))
+
+
+@inv_views.route('/investigations/<id>/task')
+def add_investigation_task(id):
+    """ Add Task to Investigation """
+    return redirect(url_for('tsk_views.create_task_by_investiagtion_id',
+                            id=id))
