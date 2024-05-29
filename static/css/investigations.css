@@ -3,10 +3,12 @@
 :root {
 	--clr-light: aqua;
 	--clr-black: rgb(0,0,0);
-	--clr-white: rgb(250,250,250);
+	--clr-white: white;
 	--clr-clr1: linear-gradient(to left, aliceblue, rgb(95, 95, 250));
 	--clr-clr2: #f6f6f6ab;
 	--clr-clr3: #d5d5d582;
+	--clr-clr4: #726db4;
+	--clr-clr5: rgba(2, 2, 2, 0.753);
 }
 
 * {
@@ -89,6 +91,25 @@ body {
 	margin-top: 0;
 }
 
+.nav-items a {
+	outline: none;
+	text-decoration: none;
+	color: var(--clr-black);
+	align-items: center;
+	align-content: center;
+	display: inline-flex;
+	cursor: pointer;
+}
+
+.nav-items:hover {
+      background-color: var(--clr-clr5);
+}
+
+.nav-items:hover i,
+.nav-items:hover span {
+	color: var(--clr-white);
+}
+
 .nav-items i {
 	margin-left: 5px;
 	font-size: 30px;
@@ -103,19 +124,14 @@ body {
 	font-weight: 600;
 }
 
-
-
-.content-panel-1 {
-	grid-area: content-panel-1;
-	background-color: var(--clr-light);
-	border-radius: 5px;
-}
-
-
 .content-panel-1 {
 	display: flex;
+	flex-direction: column;
 	border-radius: 10px;
 	background-color: var(--clr-clr2);
+	grid-area: content-panel-1;
+	border-radius: 5px;
+	padding: 5px;
 }
 
 .content-panel-left {
@@ -135,13 +151,74 @@ body {
 	text-align: center;
 }
 
-.content-panel-1 i {
-	font-size: 60px;
-	width: 40%;
-	height: 100%;
+.inv-heading-title {
+	display: flex;
+	padding-top: 0px;
+}
+
+.inv-heading-title h2 {
+	width: 80%;
+	float: left;
+}
+
+.inv-heading-title button {
+	width: 20%;
+	height: 35px;
+	margin: 5px 10px 5px 10px;
+	float: right;
+	font-size: 18px;
+	border-radius: 5px;
+	background-color: var();
+	border-color: transparent;
+	background-color: var(--clr-clr4);
+	color: var(--clr-white);
+}
+
+.inv-table {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	overflow-x: auto;
+	scroll-behavior: smooth;
+	white-space: nowrap;
+}
+
+th {
+	
+}
+
+th:nth-child(1) {
+	min-width: 85px;
+}
+th:nth-child(2) {
+	min-width: 85px;
+}
+th:nth-child(3) {
+	min-width: 85px;
+}
+th:nth-child(4) {
+	min-width: 300px;
+}
+th:nth-child(5) {
+	min-width: 200px;
+}
+th:nth-child(6) {
+	min-width: 85px;
+}
+th:nth-child(7) {
+	min-width: 100px;
+}
+
+td:nth-child(1) a {
+	text-decoration: none;
+}
+
+.fa-solid fa-trash-can {
+	color: var(--clr-black);
+	width: 50px;
+	justify-content: center;
 	align-items: center;
 	align-content: center;
-	padding: 5px;
 }
 
 .main {

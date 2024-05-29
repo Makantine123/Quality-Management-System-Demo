@@ -1,6 +1,8 @@
 """Investigations Model Class"""
+from datetime import datetime
 from sqlalchemy.sql import func
 from sqlalchemy import Column, String, DateTime, event
+from sqlalchemy.sql.functions import now
 from .base_model import BaseModel
 
 
@@ -8,7 +10,7 @@ class Investigations(BaseModel):
     """Investigations Class"""
     __tablename__ = "investigations"
 
-    ir_number = Column(String(10), nullable=False, unique=True)
+    ir_number = Column(String(20), nullable=False, unique=True)
     raised_by = Column(String(20), nullable=False)
     line_manager = Column(String(20), nullable=False)
     priority = Column(String(10), nullable=False)
@@ -22,16 +24,17 @@ class Investigations(BaseModel):
         """Initialise investigations Class"""
         super().__init__(*args, **kwargs)
 
-    def generate_ir_no(self):
+    @staticmethod
+    def generate_ir_no():
         """Generate new ir number"""
-        current_year = func.extract('year', func.now()).scalar()
+        current_year = f"{datetime.now().year}"
 
         from app import Session
         db = Session()
 
         count = db.query(
             Investigations.ir_number).filter(
-            Investigations.ir_number.like(f"{current_year}")).count()
+            Investigations.ir_number.like(f"{current_year}%")).count()
 
         if count:
             increment = count + 1
@@ -40,12 +43,3 @@ class Investigations(BaseModel):
             ir_number = f"{current_year}-001"
 
         return ir_number
-
-
-def before_insert_listener(mapper, connection, target):
-    """ Sets the ir_number before insert """
-    if target.ir_number is None:
-        target.ir_number = target.generate_ir_no()
-
-
-event.listen(Investigations, 'before_insert', before_insert_listener)

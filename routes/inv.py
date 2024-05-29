@@ -1,7 +1,10 @@
 """ Investigations Routees """
-from flask import Blueprint, render_template, flash, url_for, redirect
+from flask import Blueprint, render_template, flash, request, url_for, redirect
+from sqlalchemy import desc
+from sqlalchemy.util import duck_type_collection
 from models.investigations import Investigations
 from models.investigations_details import InvestigationsDetails
+from models.tasks import Tasks
 from forms.investigations import InvestigationWithDetailsForm
 
 inv_views = Blueprint("inv_views", __name__)
@@ -23,48 +26,114 @@ def investigation_details(ir_number):
     """ Render Template With Investigation and its details """
     from app import Session
     db = Session()
-    if ir_number:
-        details = db.query(InvestigationsDetails).all()
-        investigation = db.query(Investigations).first()
-        return render_template(
+    investigation = db.query(Investigations).filter_by(
+        ir_number=ir_number).first()
+    details = db.query(InvestigationsDetails).filter_by(
+        investigation_id=investigation.id).order_by(
+        desc(InvestigationsDetails.date_created_on)).first()
+    detailslist = db.query(InvestigationsDetails).filter_by(
+        investigation_id=investigation.id).all()
+    tasklist = db.query(Tasks).filter_by(
+        investigation_id=investigation.id).all()
+    db.close()
+    if details is None:
+        details = {}
+        details['investigation_id'] = investigation.id
+    return render_template(
             'dashboard/investigations/investigations_details.html',
-            investigations=investigation, details=details)
+            investigations=investigation, details=details,
+            detailslist=detailslist, tasklist=tasklist)
 
-    return redirect(url_for('investigations_list'))
 
-
-@inv_views.route('/investigations/new', methods=['GET', 'POST'])
+@inv_views.route('/investigations/save_new', methods=['GET', 'POST'])
 def new_investigation():
     """ Save new investigation """
-    form = InvestigationWithDetailsForm()
-
-    if form.validate_on_submit():
-        from app import Session
-        db = Session()
-
-        # Create Investigation
-        investigation_data = form.investigation.data
-        investigation = Investigations(**investigation_data)
+    form = request.form
+    from app import Session
+    db = Session()
+    inv_id = form.get('id')
+    investigation = db.query(Investigations).filter_by(id=inv_id).first()
+    if investigation is None:
+        investigation = Investigations(
+            raised_by=form.get('raised_by'),
+            status=form.get('status'),
+            priority=form.get('priority'),
+            ir_source=form.get('ir_source'),
+            line_manager=form.get('line_manager'),
+            description=form.get('description'),
+            root_cause_summary=form.get('root_cause_summary'),
+            team_leader=form.get('team_leader'),
+            due_date=form.get('due_date'),
+        )
+        investigation.ir_number = investigation.generate_ir_no()
+        investigation.due_date = investigation.from_datetime_string(
+            form.get('due_date'))
         db.add(investigation)
-        db.commit()
+        details = InvestigationsDetails()
+        details.investigation_id = investigation.id
+    else:
+        investigation.raised_by = form.get('raised_by')
+        investigation.status = form.get('status')
+        investigation.priority = form.get('priority')
+        investigation.ir_source = form.get('ir_source')
+        investigation.line_manager = form.get('line_manager')
+        investigation.description = form.get('description')
+        investigation.root_cause_summary = form.get('root_cause_summary')
+        investigation.team_leader = form.get('team_leader')
+        investigation.due_date = investigation.from_datetime_string(form.get('due_date'))
 
-        # Create Investigation Details
-        details_data = form.details.data
-        for detail in details_data:
-            detail['investigation_id'] = investigation.id
-            investigation_detail = InvestigationsDetails(**detail)
-            db.add(investigation_detail)
+    ir_number = investigation.ir_number
+    db.commit()
 
-        db.commit()
-        flash('Investigation created successfully!', 'success')
-        return redirect(url_for('inv_views.investigations_list'))
-
-    return render_template(
-        'dashboard/investigations/create_investigations.html', form=form)
+    db.close()
+    return redirect(url_for('inv_views.investigation_details',
+                            ir_number=ir_number))
 
 
 @inv_views.route('/investigations/create', methods=['GET', 'POST'])
 def create_investigation():
     """ Create a new Investigation """
-    form = InvestigationWithDetailsForm()
-    return render_template('dashboard/investigations/new_investigations.html', form=form)
+    investigations = []
+    details = InvestigationsDetails()
+    return render_template(
+        'dashboard/investigations/investigations_details.html',
+        investigations=investigations, details=details)
+
+
+@inv_views.route('/investigation_detail/save', methods=['POST', 'GET'])
+def save_investigation_detail():
+    """ Save investigation detail """
+    form = request.form
+    from app import Session
+    db = Session()
+    inv_detail_id = form.get('id')
+    details = db.query(InvestigationsDetails).filter_by(
+        id=inv_detail_id).first()
+    if details is None:
+        details = InvestigationsDetails(
+            steps_required=form.get('steps_required'),
+            by_who=form.get('by_who'),
+            main_causes=form.get('main_causes'),
+            investigation_id=form.get('investigation_id'),
+            status=form.get('status'),
+        )
+        details.due_date = details.from_datetime_string(form.get('due_date'))
+        db.add(details)
+    else:
+        details.steps_required = form.get('steps_required')
+        details.by_who = form.get('by_who')
+        details.main_causes = form.get('main_causes')
+        details.investigation_id = form.get('investigation_id')
+        details.status = form.get('status')
+        details.due_date = details.from_datetime_string(form.get('due_date'))
+
+    db.commit()
+
+    inv_id = details.investigation_id
+    investigation = db.query(Investigations).filter_by(
+        id=inv_id).first()
+    ir_number = investigation.ir_number
+    db.close()
+
+    return redirect(url_for('inv_views.investigation_details',
+                            ir_number=ir_number))

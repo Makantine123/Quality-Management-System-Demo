@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Flask App"""
 import logging
+from jinja2 import FileSystemLoader
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from flask import Flask, render_template
@@ -17,6 +18,7 @@ def create_app():
     """ Create and Configure flask App """
     app = Flask(__name__)
     app.config.from_object(Config)
+
     initialize_extentions(app)
     setup_database(app)
     register_error_handlers(app)
@@ -37,10 +39,14 @@ def register_all_blueprints(app):
 
 def initialize_extentions(app):
     """ Initialize Flask extentions """
-#    from flask_login import LoginManager
-#    login_manager = LoginManager()
-#    login_manager.init_app(app)
-
+    app.jinja_loader = FileSystemLoader('templates')
+    # Define a custom filter function to format the date
+    def format_date(value, format='%Y-%m-%d'):
+        if value is not None:
+            return value.strftime(format)
+        return ''
+    # Register the custom filter with the Jinja2 environment
+    app.jinja_env.filters['format_date'] = format_date
 
 def setup_database(app):
     """ Set up the database """

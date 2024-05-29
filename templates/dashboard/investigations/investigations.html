@@ -19,25 +19,22 @@
       <div class="sidebar" id="sidebar">
         <nav class="nav-container" id="nav-container">
           <ul>
-            <li class="nav-items"><i class="fa-solid fa-house-chimney"></i><span> Overview</span></li>
-            <li class="nav-items"><i class="fa-solid fa-graduation-cap"></i><span> Investigations</span></li>
-            <li class="nav-items"><i class="fa-solid fa-clipboard-check"></i><span> Audits</span></li>
-            <li class="nav-items"><i class="fa-solid fa-list-check"></i><span> Tasks</span></li>
-            <li class="nav-items"><i class="fa-solid fa-award"></i><span> Complience</span></li>
-            <li class="nav-items"><i class="fa-solid fa-calendar-days"></i><span> Schedule</span></li>
+            <li class="nav-items"><a href="{{ url_for('dash_views.dashboard') }}"><i class="fa-solid fa-house-chimney"></i><span> Overview</span></a></li>
+            <li class="nav-items"><a href="{{ url_for('dash_views.click_investiagtions') }}"><i class="fa-solid fa-graduation-cap"></i><span> Investigations</span></a></li>
+            <li class="nav-items"><a><i class="fa-solid fa-clipboard-check"></i><span> Audits</span></a></li>
+            <li class="nav-items"><a><i class="fa-solid fa-list-check"></i><span> Tasks</span></li>
+            <li class="nav-items"><a><i class="fa-solid fa-award"></i><span> Complience</span></a></li>
+            <li class="nav-items"><a><i class="fa-solid fa-calendar-days"></i><span> Schedule</span></a></li>
           </ul>
         </nav>
       </div>
       
       <div class="content-panel-1" id="content-panel-1">
-        <div class="inv-heading">
-          <div class="inv-heading titlee">
-            <h2>Investigations</h2>
-          </div>
-          <div class="inv-heading buttons">
-            <button type=""> Create New </button>
-          </div>
+        <div class="inv-heading-title">
+          <h2>Investigations</h2>
+          <button id="open-new-button"> Open New </button>
         </div>
+
         <div class="inv-table">
           <table class="table table-boardered">
             <thead>
@@ -48,26 +45,27 @@
                 <th>Description</th>
                 <th>Summary of Root Causes</th>
                 <th>Due State</th>
-                <th>Source</th>
                 <th>Status</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
               {% for investigation in investigations %}
               <tr>
-                <td>{{ investigation.ir_number }}</td>
-                <td>{{ investigation.date_created_on }}</td>
+                <td><a href="{{ url_for('inv_views.investigation_details', ir_number=investigation.ir_number) }}">{{ investigation.ir_number }}   <i class="fa-solid fa-pen-to-square"></i></a></td>
+                <td>{{ investigation.date_created_on | format_date('%Y-%m-%d') }}</td>
                 <td>{{ investigation.line_manager }}</td>
                 <td>{{ investigation.description }}</td>
                 <td>{{ investigation.root_cause_summary }}</td>
-                <td>{{ investigation.due_date }}</td>
-                <td>{{ investigation.ir_source }}</td>
+                <td>{{ investigation.due_date | format_date('%Y-%m-%d') }}</td>
                 <td>{{ investigation.status }}</td>
+                <td><i class="fa-solid fa-trash-can"></i></td>
               </tr>
               {% endfor %}
             </tbody>
           </table>
         </div>
+
       </div>
       <footer>
         <ul>
@@ -77,5 +75,6 @@
         </ul>
       </footer>
     </div>
+    <script src="../../../static/js/investigations.js"></script>
   </body>
 </html>

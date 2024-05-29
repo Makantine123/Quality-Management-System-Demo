@@ -180,6 +180,23 @@ body {
 	border-color: transparent;
 	background-color: var(--clr-clr4);
 	color: white;
+	cursor: pointer;
+}
+
+.inv-heading-title a {
+	width: 20%;
+	margin: 5px 10px 5px 10px;
+	float: right;
+	border-radius: 5px;
+	border-color: transparent;
+	background-color: var(--clr-clr4);
+	color: white;
+	text-decoration: none;
+	font-size: 13px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
 }
 
 .form-container {
@@ -218,6 +235,43 @@ body {
 	border-radius: 5px;
 	border-color: transparent;
 }
+
+.summary-table-container {
+	overflow-x: auto;
+	overflow-y: auto;
+}
+
+.uuid4 {
+	display: block;
+	width: 50px;
+	text-overflow: ellipsis;
+}
+th {
+	text-align: left;
+}
+
+th:nth-child(1) {
+	width: 15px;
+}
+
+td {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+td:nth-child(1) {
+	width: 20px;
+	text-overflow: ellipsis;
+	overflow-x: hidden;
+}
+
+td:nth-child(2) {
+	width: 70px;
+}
+
+td:nth-child(3) {
+	width: 100px;
+}
+
 
 .main {
 	grid-area: main;

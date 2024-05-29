@@ -1,5 +1,6 @@
 """Base Model Class"""
 
+from datetime import datetime
 import uuid
 from sqlalchemy import Column, DateTime, String
 from sqlalchemy.ext.declarative import as_declarative
@@ -29,6 +30,7 @@ class BaseModel:
     def __init__(self, *args, **kwargs):
         """Initialisation of class"""
 
+    @staticmethod
     def as_dict(self) -> dict:
         """Returns dictionary represetation of class / table"""
         mydict = {}
@@ -40,3 +42,13 @@ class BaseModel:
         if "_sa_instance_state" in mydict:
             del mydict["_sa_instance_state"]
         return mydict
+
+    @staticmethod
+    def to_datetime_string(dt):
+        """ Convert a datetime object to a string """
+        return dt.strftime('%Y-%m-%dT%H:%M')
+
+    @staticmethod
+    def from_datetime_string(dt_str):
+        """ Convert a string to a datetime object """
+        return datetime.strptime(dt_str, '%Y-%m-%dT%H:%M')

@@ -30,28 +30,28 @@
       </div>
       
       <div class="content-panel-1" id="content-panel-1">
-        <form action="#">
+        <form action="{{ url_for('inv_views.new_investigation') }}" id="investigation-form" method="post">
           <div class="inv-heading-title">
             <h2>Investigation</h2>
-            <button type="">Go Back / Close</button>
+            <a href="/investigations">Go Back / Close</a>
             <button type="submit">SAVE</button>
           </div>
           <div class="form-container">
           <div class="form-group">
             <label for="id">ID.</label>
-            <input type="text" name="id" value="{{ investigations.id }}" disabled>
+            <input type="text" name="id" value="{{ investigations.id }}" readonly>
           </div>
           <div class="form-group">
             <label for="ir_number">IR No.</label>
-            <input type="text" name="ir_number" value="{{ investigations.ir_number }}" disabled>
+            <input type="text" name="ir_number" value="{{ investigations.ir_number }}" readonly>
           </div>
           <div class="form-group">
             <label for="raised_by">Raised By.</label>
-            <input type="text" name="raised_by" value="{{ investigations.raised_by }}">
+            <input type="text" name="raised_by" value="{{ investigations.raised_by }}" required>
           </div>
           <div class="form-group">
             <label for="priority">Priority</label>
-            <select id="priority" name="priority">
+            <select id="priority" name="priority" required>
               <option value="low" {% if investigations.priority == 'Low' %}selected{% endif %}>Low</option>
               <option value="medium" {% if investigations.priority == 'Medium' %}selected{% endif %}>Medium</option>
               <option value="high" {% if investigations.priority == 'High' %}selected{% endif %}>High</option>
@@ -59,7 +59,7 @@
           </div>
            <div class="form-group">
             <label for="status">Status</label>
-             <select id="status" name="status">
+             <select id="status" name="status" required>
               <option value="Registered" {% if investigations.status == 'Registered' %}selected{% endif %}>Registed</option>
               <option value="In Progress" {% if investigations.status == 'In Progress' %}selected{% endif %}>In Progress</option>
               <option value="Completed" {% if investigations.status == 'Completed' %}selected{% endif %}>Completed</option>
@@ -70,31 +70,31 @@
           </div>
           <div class="form-group">
             <label for="due_date">Due Date</label>
-            <input type="datetime-local" name="due_date" value="{{ investigations.due_date }}">
+            <input type="datetime-local" name="due_date" value="{{ investigations.due_date }}" required>
           </div>
            <div class="form-group">
             <label for="ir_source">IR Source</label>
-            <input type="" name="ir_source" value="{{ investigations.ir_source }}">
+            <input type="" name="ir_source" value="{{ investigations.ir_source }}" required>
           </div>
        <div class="form-group" id="line_manager" >
             <label for="line_manager">Line Manager</label>
-            <input type="text" name="line_manager" value="{{ investigations.line_manager }}">
+            <input type="text" name="line_manager" value="{{ investigations.line_manager }}" required>
           </div>
             <div class="form-group" id="description" >
             <label for="description">Description</label>
-            <textarea type="text" name="description">{{ investigations.description }}</textarea>
+            <textarea type="text" name="description" required>{{ investigations.description }}</textarea>
           </div>
          <div class="form-group" id="root_cause_summary" >
             <label for="root_cause_summary">Root Cause Summary</label>
-            <textarea type="text" name="root_cause_summary">{{ investigations.root_cause_summary }}</textarea>
+            <textarea type="text" name="root_cause_summary" required>{{ investigations.root_cause_summary }}</textarea>
           </div>
             <div class="form-group" id="team_leader" >
             <label for="team_leader">Team Leader</label>
-            <input type="datetime" name="team_leader" value="{{ investigations.team_leader }}">
+            <input type="datetime" name="team_leader" value="{{ investigations.team_leader }}" required>
           </div>
           <div class="form-group" id="date_created_on" >
             <label for="date_created_on">Date Created</label>
-            <input type="datetime-local" name="team_leader" value="{{ investigations.date_created_on }}" disabled>
+            <input type="datetime-local" name="date_created_on" value="{{ investigations.date_created_on }}" readonly>
           </div>
          </div>
         </form>
@@ -102,32 +102,56 @@
 
       <div class="content-panel-2">
         <div class="inv-heading-title">
-          <h2>Investigation Summary</h2>
+          <h2>Root Causes Summary</h2>
+        </div>
+        <div class="summary-table-container">
+          <table class="summary-table">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>By Who</th>
+                <th>Main Cause</th>
+                <th>Status</th>
+                <th>Due Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for detail in detailslist %}
+              <tr>
+                <td class="uuid4"><a class="uuid4">{{ detail.id }}</a></td>
+                <td>{{ detail.by_who }}</td>
+                <td>{{ detail.main_causes }}</td>
+                <td>{{ detail.status }}</td>
+                <td>{{ detail.due_date | format_date('%Y-%m-%d') }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       </div>
       
       <div class="content-panel-3">
-        <form action="#">
+        <form action="/investigation_detail/save" id="details-form" method="post">
           <div class="inv-heading-title">
             <h2>Investigation Main Cause Detail</h2>
-            <button type="">Add New</button>
-            <button type="submit">SAVE</button>
+            <button type="button" onclick="clearForm('details-form')" {% if details.investigation_id is none %}disabled{% endif %}>Add New</button>
+            <button type="submit" {% if details.investigation_id is none %}disabled{% endif %}>SAVE</button>
           </div>
           <div class="form-group">
-            <label for="">ID.</label>
-            <input type="" name="id" value="{{ details.id }}" disabled>
+            <label for="id">ID.</label>
+            <input type="text" name="id" value="{{ details.id }}" readonly>
           </div>
           <div class="form-group">
-            <label for="">Date Created</label>
-            <input type="datetime-local" name="id" value="{{ details.date_created_on }}" disabled>
+            <label for="date_created_on">Date Created</label>
+            <input type="datetime-local" name="date_created_on" value="{{ details.date_created_on }}" readonly>
           </div>
           <div class="form-group">
-            <label for="">Updated On</label>
-            <input type="datetime-local" name="id" value="{{ details.date_updated_on }}" disabled>
+            <label for="date_updated_on">Updated On</label>
+            <input type="datetime-local" name="date_updated_on" value="{{ details.date_updated_on }}" readonly>
           </div>
           <div class="form-group">
             <label for="status">Status</label>
-             <select id="status" name="status">
+             <select id="status" name="status" required>
               <option value="Registered" {% if details.status == 'Registered' %}selected{% endif %}>Registed</option>
               <option value="In Progress" {% if details.status == 'In Progress' %}selected{% endif %}>In Progress</option>
               <option value="Completed" {% if details.status == 'Completed' %}selected{% endif %}>Completed</option>
@@ -137,24 +161,24 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="">Investigation ID</label>
-            <input type="" name="ir_number" value="{{ details.investigation_id }}" disabled>
+            <label for="investigation_id">Investigation ID</label>
+            <input type="text" name="investigation_id" value="{{ details.investigation_id }}" readonly>
           </div>
           <div class="form-group">
-            <label for="">Main Cause</label>
-            <input type="" name="raised_by" value="{{ details.main_causes }}">
+            <label for="main_causes">Main Cause</label>
+            <input type="text" name="main_causes" value="{{ details.main_causes }}" required>
           </div>
           <div class="form-group">
-            <label for="">Steps Required</label>
-            <textarea type="" name="raised_by">{{ details.steps_required }}</textarea>
+            <label for="steps_required">Steps Required</label>
+            <textarea type="text" name="steps_required" required>{{ details.steps_required }}</textarea>
           </div>
-          <div class="form-group">
-            <label for="">By Who</label>
-            <input type="" name="raised_by" value="{{ details.by_who }}">
+           <div class="form-group">
+            <label for="due_date">Due Date</label>
+            <input type="datetime-local" name="due_date" value="{{ details.due_date }}" required>
           </div>
-          <div class="form-group">
-            <label for="">Due Date</label>
-            <input type="datetime-local" name="raised_by" value="{{ details.main_causes }}">
+         <div class="form-group">
+            <label for="by_who">By Who</label>
+            <input type="text" name="by_who" value="{{ details.by_who }}" required>
           </div>
         </form>
       </div>
@@ -163,6 +187,10 @@
         <div class="inv-heading-title">
           <h2>Investigation Tasks</h2> 
           <button type="submit">Add New</button>
+        </div>
+        <div class="task-container">
+          <h3>tasklist</h3>
+          
         </div>
       </div>
 
@@ -175,5 +203,6 @@
       </footer>
 
     </div>
+    <script src="../../../static/js/investigations_details.js"></script>
   </body>
 </html>

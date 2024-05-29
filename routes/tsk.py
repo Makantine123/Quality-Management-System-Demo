@@ -7,4 +7,6 @@ from forms.investigations import InvestigationWithDetailsForm
 tsk_views = Blueprint("tsk_views", __name__)
 
 
-@tsk_views.route('/investigations/detail/<>')
+@tsk_views.route('/investigations/detail/<id>')
+def investigation_by_id(id):
+    """ Show Investigation by id """
