@@ -30,32 +30,35 @@
       </div>
       
       <div class="content-panel-1" id="content-panel-1">
-        <form action="#">
+        <form action="{{ url_for('tsk_views.save_task') }}" method="post">
           <div class="inv-heading-title">
             <h2>Task</h2>
-            <button type="">Go Back / Close</button>
+            <button type="button" onclick="location.href='{{ url_for('tsk_views.go_back_to_investigation_details', id=task.investigation_id) }}'">Go Back / Close</button>
             <button type="submit">SAVE</button>
           </div>
           <div class="form-container">
           <div class="form-group" id="id">
             <label for="id">ID.</label>
-            <input type="text" name="id" value="{{ task.id }}" disabled>
+            <input type="text" name="id" value="{{ task.id }}" readonly>
           </div>
-           <div class="form-group">
+           <div class="form-group" id="investigation_id">
             <label for="investigation_id">Investigation ID</label>
-            <input type="text" name="investigation_id" value="{{ task.investigation_id }}" disabled>
+            <input type="text" name="investigation_id" value="{{ task.investigation_id }}" readonly>
           </div>
-         <div class="form-group">
-            <label for="investigationsdetail_id">Details ID</label>
-            <input type="text" name="investigationsdetail_id" value="{{ task.investigationsdetail_id }}" disabled>
+          <div class="form-group" id="task_type">
+            <label for="task_type">Type</label>
+            <select id="task_type" name="task_type" required>
+              <option value="Fact Finding" {% if task.task_type == 'Fact Finding' %}selected{% endif %}>Fact Finding</option>
+              <option value="Root Cause Steps" {% if task.task_type == 'Root Cause Steps' %}selected{% endif %}>Root Cause Steps</option>
+            </select>
           </div>
           <div class="form-group" id="assign_to">
             <label for="assign_to">Assign To</label>
-            <input type="text" name="assign_to" value="{{ task.assign_to }}">
+            <input type="text" name="assign_to" value="{{ task.assign_to }}" required>
           </div>
            <div class="form-group" id="status">
             <label for="status">Status</label>
-             <select id="status" name="status">
+             <select id="status" name="status" required>
               <option value="Registered" {% if task.status == 'Registered' %}selected{% endif %}>Registed</option>
               <option value="In Progress" {% if task.status == 'In Progress' %}selected{% endif %}>In Progress</option>
               <option value="Completed" {% if task.status == 'Completed' %}selected{% endif %}>Completed</option>
@@ -66,19 +69,19 @@
           </div>
           <div class="form-group" id="due_date">
             <label for="due_date">Due Date</label>
-            <input type="datetime-local" name="due_date" value="{{ task.due_date }}">
+            <input type="datetime-local" name="due_date" value="{{ task.due_date }}" required>
           </div>
        <div class="form-group" id="date_updated_on" >
             <label for="date_updated_on">Updated On</label>
-            <input type="datetime-local" name="date_updated_on" value="{{ task.date_updated_on }}">
+            <input type="datetime-local" name="date_updated_on" value="{{ task.date_updated_on }}" readonly>
           </div>
           <div class="form-group" id="date_created_on" >
             <label for="date_created_on">Date Created</label>
-            <input type="datetime-local" name="team_leader" value="{{ investigations.date_created_on }}" disabled>
+            <input type="datetime-local" name="date_created_on" value="{{ task.date_created_on }}" readonly>
           </div>
-           <div class="form-group" id="description" >
+           <div class="form-group" id="description">
             <label for="description">Description</label>
-            <textarea type="text" name="description">{{ task.description }}</textarea>
+            <textarea type="text" name="description" required>{{ task.description }}</textarea>
           </div>
         </div>
         </form>
@@ -99,19 +102,19 @@
           </div>
            <div class="form-group">
             <label for="id">ID.</label>
-            <input type="text" name="id" value="{{ taskdetails.id }}" disabled>
+            <input type="text" name="id" value="{{ taskdetails.id }}" readonly>
           </div>
          <div class="form-group">
             <label for="task_id">Task ID</label>
-            <input type="text" name="task_id" value="{{ taskdetails.task_id }}" disabled>
+            <input type="text" name="task_id" value="{{ taskdetails.task_id }}" readonly>
           </div>
           <div class="form-group">
             <label for="">Date Created</label>
-            <input type="datetime-local" name="id" value="{{ taskdetails.date_created_on }}" disabled>
+            <input type="datetime-local" name="id" value="{{ taskdetails.date_created_on }}" readonly>
           </div>
           <div class="form-group">
             <label for="">Updated On</label>
-            <input type="datetime-local" name="id" value="{{ taskdetails.date_updated_on }}" disabled>
+            <input type="datetime-local" name="id" value="{{ taskdetails.date_updated_on }}" readonly>
           </div>
           <div class="form-group">
             <label for="status">Status</label>

@@ -22,7 +22,7 @@ class TaskDetails(BaseModel):
     _attachment_name = Column("attachment_name", String(60), nullable=False)
     attachment_comments = Column(String(255), nullable=False)
     date_updated_on = Column(DateTime, nullable=False, onupdate=func.now())
-    date_completed_on = Column(DateTime, nullable=False, default=func.now())
+    date_completed_on = Column(DateTime, nullable=True)
 
     tasks = relationship('Tasks', backref='tasks')
     investigations = relationship('Investigations',
