@@ -2,7 +2,7 @@
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-db_path = os.path.join(basedir, 'data', 'database.db')
+db_path = os.path.join(basedir, 'server', 'database.db')
 
 
 class Config:
@@ -14,4 +14,4 @@ class Config:
     GOOGLE_SECRET = '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'
     GITHUB_CLIENT_ID = 'Ov23liELB2X3erDOHOn7'
     GITHUB_SECRET = 'db753dcfd2dd9ba5ec766271366becadddb4f60a'
-    UPLOAD_FOLDER = 'data/files/'
+    UPLOAD_FOLDER = 'server/files/'

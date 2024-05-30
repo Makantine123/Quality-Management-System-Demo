@@ -19,8 +19,8 @@
       <div class="sidebar" id="sidebar">
         <nav class="nav-container" id="nav-container">
           <ul>
-            <li class="nav-items"><i class="fa-solid fa-house-chimney"></i><span> Overview</span></li>
-            <li class="nav-items"><i class="fa-solid fa-graduation-cap"></i><span> Investigations</span></li>
+            <li class="nav-items"><a href="{{ url_for('dash_views.dashboard') }}"><i class="fa-solid fa-house-chimney"></i><span> Overview</span></a></li>
+            <li class="nav-items"><a href="{{ url_for('dash_views.click_investiagtions') }}"><i class="fa-solid fa-graduation-cap"></i><span> Investigations</span></a></li>
             <li class="nav-items"><i class="fa-solid fa-clipboard-check"></i><span> Audits</span></li>
             <li class="nav-items"><i class="fa-solid fa-list-check"></i><span> Tasks</span></li>
             <li class="nav-items"><i class="fa-solid fa-award"></i><span> Complience</span></li>
@@ -64,7 +64,6 @@
               <option value="In Progress" {% if task.status == 'In Progress' %}selected{% endif %}>In Progress</option>
               <option value="Completed" {% if task.status == 'Completed' %}selected{% endif %}>Completed</option>
               <option value="Approved" {% if task.status == 'Approved' %}selected{% endif %}>Approved</option>
-              <option value="Rejected" {% if task.status == 'Rejected' %}selected{% endif %}>Rejected</option>
               <option value="Overdue" {% if task.status == 'Overdue' %}selected{% endif %}>Overdue</option>
             </select>
           </div>
@@ -149,7 +148,6 @@
               <option value="In Progress" {% if taskdetails.status == 'In Progress' %}selected{% endif %}>In Progress</option>
               <option value="Completed" {% if taskdetails.status == 'Completed' %}selected{% endif %}>Completed</option>
               <option value="Approved" {% if taskdetails.status == 'Approved' %}selected{% endif %}>Approved</option>
-              <option value="Rejected" {% if taskdetails.status == 'Rejected' %}selected{% endif %}>Rejected</option>
               <option value="Overdue" {% if taskdetails.status == 'Overdue' %}selected{% endif %}>Overdue</option>
             </select>
           </div>

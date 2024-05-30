@@ -1,12 +1,9 @@
 """ Investigations Routees """
-from operator import inv
-from flask import Blueprint, render_template, flash, request, url_for, redirect
+from flask import Blueprint, render_template, request, url_for, redirect
 from sqlalchemy import desc
-from sqlalchemy.util import duck_type_collection, unbound_method_to_callable
 from models.investigations import Investigations
 from models.investigations_details import InvestigationsDetails
 from models.tasks import Tasks
-from forms.investigations import InvestigationWithDetailsForm
 
 inv_views = Blueprint("inv_views", __name__)
 
@@ -32,10 +29,12 @@ def investigation_details(ir_number):
     details = db.query(InvestigationsDetails).filter_by(
         investigation_id=investigation.id).order_by(
         desc(InvestigationsDetails.date_created_on)).first()
-    detailslist = db.query(InvestigationsDetails).filter_by(
-        investigation_id=investigation.id).all()
-    tasklist = db.query(Tasks).filter_by(
-        investigation_id=investigation.id).all()
+    detailslist = db.query(InvestigationsDetails).filter(
+        InvestigationsDetails.investigation_id == investigation.id,
+        InvestigationsDetails.status != "Rejected").all()
+    tasklist = db.query(Tasks).filter(
+        Tasks.investigation_id == investigation.id,
+        Tasks.status != "Rejected").all()
     db.close()
     if details is None:
         details = {}
@@ -177,10 +176,11 @@ def delete_task(id):
     details = db.query(InvestigationsDetails).filter_by(
         investigation_id=inv_id).order_by(
         desc(InvestigationsDetails.date_created_on)).first()
-    detailslist = db.query(InvestigationsDetails).filter_by(
-        investigation_id=inv_id).all()
-    tasklist = db.query(Tasks).filter_by(
-        investigation_id=inv_id).all()
+    detailslist = db.query(InvestigationsDetails).filter(
+        InvestigationsDetails.investigation_id == inv_id,
+        InvestigationsDetails.status != "Rejected").all()
+    tasklist = db.query(Tasks).filter(
+        Tasks.investigation_id == inv_id, Tasks.status != "Rejected").all()
     db.close()
     if details is None:
         details = {}
@@ -199,8 +199,12 @@ def investigation_details_by_id(id):
     details = db.query(InvestigationsDetails).filter_by(id=id).first()
     investigation_id = details.investigation_id
     investigation = db.query(Investigations).filter_by(id=investigation_id).first()
-    detailslist = db.query(InvestigationsDetails).filter_by(investigation_id=investigation_id).all()
-    tasklist = db.query(Tasks).filter_by(investigation_id=investigation_id).all()
+    detailslist = db.query(InvestigationsDetails).filter(
+        InvestigationsDetails.investigation_id == investigation_id,
+        InvestigationsDetails.status != "Rejected").all()
+    tasklist = db.query(Tasks).filter(
+        Tasks.investigation_id == investigation_id,
+        Tasks.status != "Rejected").all()
 
     return render_template(
             'dashboard/investigations/investigations_details.html',

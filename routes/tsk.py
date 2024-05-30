@@ -1,9 +1,7 @@
 """ Investigations Routees """
-from flask import Blueprint, render_template, flash, request, url_for, redirect
+from flask import Blueprint, render_template, request, url_for, redirect
 from sqlalchemy import desc
 from models.investigations import Investigations
-from models.investigations_details import InvestigationsDetails
-from forms.investigations import InvestigationWithDetailsForm
 from models.tasks import Tasks
 from models.tasks_details import TaskDetails
 
@@ -17,10 +15,13 @@ def create_task_by_investiagtion_id(id):
     db = Session()
     task = {}
     task["investigation_id"] = id
-    taskslist = db.query(Tasks).filter_by(investigation_id=id).all()
+    taskslist = db.query(Tasks).filter(Tasks.investigation_id == id,
+                                       Tasks.status != "Rejected").all()
     taskdetails = {}
     taskdetails["investigation_id"] = id
-    taskdetailslist = db.query(TaskDetails).filter_by(investigation_id=id).all()
+    taskdetailslist = db.query(TaskDetails).filter(
+        TaskDetails.investigation_id == id,
+        TaskDetails.status != "Rejected").all()
     return render_template(
         'dashboard/investigations/investigations_tasks.html',
         task=task, taskdetails=taskdetails, taskslist=taskslist,
@@ -83,10 +84,13 @@ def task_by_id(id):
 
     task = db.query(Tasks).filter_by(id=id).first()
     inv_id = task.investigation_id
-    taskslist = db.query(Tasks).filter_by(investigation_id=inv_id).all()
-    taskdetails = db.query(TaskDetails).filter_by(task_id=id).order_by(
+    taskslist = db.query(Tasks).filter(Tasks.investigation_id == inv_id,
+                                       Tasks.status != "Rejected").all()
+    taskdetails = db.query(TaskDetails).filter(
+        TaskDetails.task_id == id, Tasks.status != "Rejected").order_by(
         desc(TaskDetails.date_created_on)).first()
-    taskdetailslist = db.query(TaskDetails).filter_by(task_id=id).order_by(
+    taskdetailslist = db.query(TaskDetails).filter(
+        TaskDetails.task_id == id, TaskDetails.status != "Rejected").order_by(
         desc(TaskDetails.date_created_on)).all()
     if taskdetails is None:
         taskdetails = {}
@@ -141,17 +145,20 @@ def save_investigation_task_detail():
 
     return redirect(url_for('tsk_views.task_by_id', id=tsk_id))
 
+
 @tsk_views.route('/task/details/<id>')
 def task_details_by_id(id):
     """ Fetch Task deatils by id """
     from app import Session
     db = Session()
     taskdetails = db.query(TaskDetails).filter_by(id=id).first()
-    taskdetailslist = db.query(TaskDetails).filter_by(id=id).all()
+    taskdetailslist = db.query(TaskDetails).filter(
+        TaskDetails.id == id, TaskDetails.status != "Rejected").all()
     task_id = taskdetails.task_id
     inv_id = taskdetails.investigation_id
     task = db.query(Tasks).filter_by(id=task_id).first()
-    taskslist = db.query(Tasks).filter_by(investigation_id=inv_id).all()
+    taskslist = db.query(Tasks).filter(
+        Tasks.investigation_id == inv_id, Tasks.status != "Rejected").all()
 
     return render_template(
         '/dashboard/investigations/investigations_tasks.html',
@@ -171,22 +178,3 @@ def delete_task_details(id):
         taskdetails.status = "Rejected"
         db.commit()
     return redirect(url_for('tsk_views.task_by_id', id=task_id))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -3,7 +3,7 @@
 :root {
 	--clr-light: aqua;
 	--clr-black: rgb(0,0,0);
-	--clr-white: white;
+	--clr-white: rgb(250, 250, 250);
 	--clr-clr1: linear-gradient(to left, aliceblue, rgb(95, 95, 250));
 	--clr-clr2: #f6f6f6ab;
 	--clr-clr3: #d5d5d582;
@@ -41,7 +41,7 @@ body {
 	grid-area: company-logo;
 	background-color: var(--clr-clr1);
 	border-radius: 5px;
-	padding: 15px;
+	padding: 6px;
 }
 
 .company-logo h3 {
@@ -61,6 +61,7 @@ body {
 
 .heading h1 {
 	text-align: center;
+	font-size: 28px;
 }
 
 .heading h4 {

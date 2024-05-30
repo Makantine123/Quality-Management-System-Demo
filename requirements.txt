@@ -1,6 +1,8 @@
+python3
 Flask
 flask-cors
 flask_dance
 flask_wtf
 SQLAlchemy
 jinja2
+werkzeug

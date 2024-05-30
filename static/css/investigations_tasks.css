@@ -8,6 +8,7 @@
 	--clr-clr2: #f6f6f6ab;
 	--clr-clr3: #d5d5d582;
 	--clr-clr4: #726db4;
+	--clr-clr5: rgba(2, 2, 2, 0.753)
 }
 
 * {
@@ -90,6 +91,26 @@ body {
 .nav-items:first-child {
 	margin-top: 0;
 }
+
+.nav-items a {
+	outline: none;
+	text-decoration: none;
+	color: var(--clr-black);
+	align-items: center;
+	align-content: center;
+	display: inline-flex;
+	cursor: pointer;
+}
+
+.nav-items:hover {
+      background-color: var(--clr-clr5);
+}
+
+.nav-items:hover i,
+.nav-items:hover span {
+	color: var(--clr-white);
+}
+
 
 .nav-items i {
 	margin-left: 5px;

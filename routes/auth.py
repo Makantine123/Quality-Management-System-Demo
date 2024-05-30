@@ -39,8 +39,6 @@ def standard_login():
     flash('Oops! Email and Password do not match!', 'error')
     return redirect(url_for('home'))
 
-    return render_template('dashboard/dashboard.html')
-
 
 @auth_views.route('/github_login')
 def github_login():
