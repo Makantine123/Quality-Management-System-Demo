@@ -219,11 +219,49 @@ body {
 	background-color: var(--clr-clr2);
 }
 
+.content-panel-7 img,
+.content-panel-8 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* or use "contain" based on your requirement */
+    display: block; /* removes the bottom gap if the image is an inline element */
+}
+
+
 .main {
 	grid-area: main;
 	background-color: var(--clr-clr2);
 	border-radius: 5px;
+	box-sizing: border-box;
+	padding: 5px;
 }
+
+.notes {
+	display: block;
+}
+
+.notes ul {
+	list-style-position: inside;
+}
+
+.notes ul {
+    /*padding-left: 20px; /* Add padding to indent the list items */
+    margin: 0; /* Remove default margin */
+    list-style-type: disc; /* Use a disc as the list item marker */
+	font-size: 15px;
+	margin: 0;
+	line-height: 15px;
+}
+
+.notes ul ul {
+    padding-left: 20px; /* Add padding to further indent nested list items */
+    list-style-type: circle; /* Use a different marker for nested list items */
+}
+
+.notes li {
+    margin-bottom: 10px; /* Add space between list items */
+}
+
 
 footer {
 	display: inline-flex;

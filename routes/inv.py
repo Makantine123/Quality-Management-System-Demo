@@ -1,4 +1,5 @@
 """ Investigations Routees """
+from operator import inv
 from flask import Blueprint, render_template, flash, request, url_for, redirect
 from sqlalchemy import desc
 from sqlalchemy.util import duck_type_collection, unbound_method_to_callable
@@ -42,7 +43,7 @@ def investigation_details(ir_number):
     return render_template(
             'dashboard/investigations/investigations_details.html',
             investigations=investigation, details=details,
-            detailslist=detailslist, tasklist=tasklist)
+            detailslist=detailslist, taskslist=tasklist)
 
 
 @inv_views.route('/investigations/<ir_number>/delete', methods=['POST', 'GET'])
@@ -157,3 +158,52 @@ def add_investigation_task(id):
     """ Add Task to Investigation """
     return redirect(url_for('tsk_views.create_task_by_investiagtion_id',
                             id=id))
+
+
+@inv_views.route('/task/<id>/delete', methods=['POST', 'GET'])
+def delete_task(id):
+    """ Soft delete Task by id """
+    from app import Session
+    db = Session()
+    task = db.query(Tasks).filter_by(id=id).first()
+    if task:
+        task.status = "Rejected"
+        db.commit()
+
+    inv_id = task.investigation_id
+
+    investigation = db.query(Investigations).filter_by(
+        id=inv_id).first()
+    details = db.query(InvestigationsDetails).filter_by(
+        investigation_id=inv_id).order_by(
+        desc(InvestigationsDetails.date_created_on)).first()
+    detailslist = db.query(InvestigationsDetails).filter_by(
+        investigation_id=inv_id).all()
+    tasklist = db.query(Tasks).filter_by(
+        investigation_id=inv_id).all()
+    db.close()
+    if details is None:
+        details = {}
+        details['investigation_id'] = investigation.id
+    return render_template(
+            'dashboard/investigations/investigations_details.html',
+            investigations=investigation, details=details,
+            detailslist=detailslist, taskslist=tasklist)
+
+
+@inv_views.route('/investigation/details/<id>', methods=['POST', 'GET'])
+def investigation_details_by_id(id):
+    """ Fetch investigation details by id """
+    from app import Session
+    db = Session()
+    details = db.query(InvestigationsDetails).filter_by(id=id).first()
+    investigation_id = details.investigation_id
+    investigation = db.query(Investigations).filter_by(id=investigation_id).first()
+    detailslist = db.query(InvestigationsDetails).filter_by(investigation_id=investigation_id).all()
+    tasklist = db.query(Tasks).filter_by(investigation_id=investigation_id).all()
+
+    return render_template(
+            'dashboard/investigations/investigations_details.html',
+            investigations=investigation, details=details,
+            detailslist=detailslist, taskslist=tasklist)
+

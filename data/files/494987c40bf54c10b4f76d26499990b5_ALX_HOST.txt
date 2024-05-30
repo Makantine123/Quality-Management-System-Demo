@@ -1,0 +1,8 @@
+Host: ed1aab576699.14bbaaf6.alx-cod.online
+Username: ed1aab576699
+Password: 61604e6cec3b57749535
+
+ssh ed1aab576699@ed1aab576699.14bbaaf6.alx-cod.online
+
+sftp ed1aab576699@ed1aab576699.14bbaaf6.alx-cod.online
+

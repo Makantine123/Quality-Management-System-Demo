@@ -1,5 +1,6 @@
 """ Investigations Routees """
 from flask import Blueprint, render_template, flash, request, url_for, redirect
+from sqlalchemy import desc
 from models.investigations import Investigations
 from models.investigations_details import InvestigationsDetails
 from forms.investigations import InvestigationWithDetailsForm
@@ -12,13 +13,18 @@ tsk_views = Blueprint("tsk_views", __name__)
 @tsk_views.route('/investigations/<id>/task/new')
 def create_task_by_investiagtion_id(id):
     """ Show Investigation by id """
+    from app import Session
+    db = Session()
     task = {}
     task["investigation_id"] = id
+    taskslist = db.query(Tasks).filter_by(investigation_id=id).all()
     taskdetails = {}
     taskdetails["investigation_id"] = id
+    taskdetailslist = db.query(TaskDetails).filter_by(investigation_id=id).all()
     return render_template(
         'dashboard/investigations/investigations_tasks.html',
-        task=task, taskdetails=taskdetails)
+        task=task, taskdetails=taskdetails, taskslist=taskslist,
+        taskdetailslist=taskdetailslist)
 
 @tsk_views.route('/investigation/<id>/task/goback')
 def go_back_to_investigation_details(id):
@@ -62,8 +68,8 @@ def save_task():
         task.investigation_id = form.get('investigation_id')
         task.due_date = task.from_datetime_string(form.get('due_date'))
 
-    task_id = task.id
     db.commit()
+    task_id = task.id
     db.close()
 
     return redirect(url_for('tsk_views.task_by_id', id=task_id))
@@ -76,13 +82,95 @@ def task_by_id(id):
     db = Session()
 
     task = db.query(Tasks).filter_by(id=id).first()
-    taskdetails = db.query(TaskDetails).filter_by(id=id).order_by(
+    inv_id = task.investigation_id
+    taskslist = db.query(Tasks).filter_by(investigation_id=inv_id).all()
+    taskdetails = db.query(TaskDetails).filter_by(task_id=id).order_by(
         desc(TaskDetails.date_created_on)).first()
+    taskdetailslist = db.query(TaskDetails).filter_by(task_id=id).order_by(
+        desc(TaskDetails.date_created_on)).all()
+    if taskdetails is None:
+        taskdetails = {}
+        taskdetails['task_id'] = task.id
+        taskdetails['investigation_id'] = task.investigation_id
     return render_template(
         '/dashboard/investigations/investigations_tasks.html',
-        task=task, taskdetails=taskdetails)
+        task=task, taskdetails=taskdetails, taskdetailslist=taskdetailslist,
+        taskslist=taskslist)
+
+@tsk_views.route('/investigation_task/detail/save', methods=['POST', 'GET'])
+def save_investigation_task_detail():
+    """ Save Investigation Task Detail """
+    form = request.form
+    file = request.files.get('attachment_name')
+    from app import Session
+    db = Session()
+    tsk_detail_id = form.get('id')
+    details = db.query(TaskDetails).filter_by(id=tsk_detail_id).first()
+    if details is None:
+        details = TaskDetails(
+            task_id=form.get('task_id'),
+            investigation_id=form.get('investigation_id'),
+            status=form.get('status'),
+            attachment_comments=form.get('attachment_comments'),
+            feedback=form.get('feedback'),
+        )
+        if file:
+            details.attachment_name = file
+
+        if form.get('date_completed_on') is not None:
+            details.date_completed_on = details.from_datetime_string(
+                form.get('date_completed_on'))
+        db.add(details)
+    else:
+        details.task_id = form.get('task_id')
+        details.investigation_id = form.get('investigation_id')
+        details.status = form.get('status')
+        details.date_completed_on = form.get('date_completed_on')
+        if file:
+            details.attachment_name = file
+        details.attachment_comments = form.get('attachment_comments')
+        details.feedback = form.get('feedback')
+        if form.get('date_completed_on') is not None:
+            details.date_completed_on = details.from_datetime_string(
+                form.get('date_completed_on'))
+
+    db.commit()
+
+    tsk_id = details.task_id
+    db.close()
+
+    return redirect(url_for('tsk_views.task_by_id', id=tsk_id))
+
+@tsk_views.route('/task/details/<id>')
+def task_details_by_id(id):
+    """ Fetch Task deatils by id """
+    from app import Session
+    db = Session()
+    taskdetails = db.query(TaskDetails).filter_by(id=id).first()
+    taskdetailslist = db.query(TaskDetails).filter_by(id=id).all()
+    task_id = taskdetails.task_id
+    inv_id = taskdetails.investigation_id
+    task = db.query(Tasks).filter_by(id=task_id).first()
+    taskslist = db.query(Tasks).filter_by(investigation_id=inv_id).all()
+
+    return render_template(
+        '/dashboard/investigations/investigations_tasks.html',
+        task=task, taskdetails=taskdetails, taskdetailslist=taskdetailslist,
+        taskslist=taskslist)
 
 
+@tsk_views.route('/task/details/<id>/delete', methods=['POST', 'GET'])
+def delete_task_details(id):
+    """ Soft Deletes Task details by id """
+    from app import Session
+    db = Session()
+    taskdetails = db.query(TaskDetails).filter_by(
+        id=id).first()
+    task_id = taskdetails.task_id
+    if taskdetails:
+        taskdetails.status = "Rejected"
+        db.commit()
+    return redirect(url_for('tsk_views.task_by_id', id=task_id))
 
 
 

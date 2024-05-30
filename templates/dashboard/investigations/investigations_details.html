@@ -105,7 +105,7 @@
           <h2>Root Causes Summary</h2>
         </div>
         <div class="summary-table-container">
-          <table class="summary-table">
+          <table class="table-bordered" id="table-bordered">
             <thead>
               <tr>
                 <th>No</th>
@@ -118,7 +118,7 @@
             <tbody>
               {% for detail in detailslist %}
               <tr>
-                <td class="uuid4"><a class="uuid4">{{ detail.id }}</a></td>
+                <td class="uuid4"><a class="uuid4" href="{{ url_for('inv_views.investigation_details_by_id', id=detail.id) }}"><i class="fa-solid fa-pen-to-square">{{ detail.id }}</i></a</td>
                 <td>{{ detail.by_who }}</td>
                 <td>{{ detail.main_causes }}</td>
                 <td>{{ detail.status }}</td>
@@ -188,10 +188,33 @@
           <h2>Investigation Tasks</h2> 
           <button type="button" id="add-new-task-btn" onclick="location.href='{{ url_for('inv_views.add_investigation_task', id=investigations.id) }}'"  {% if investigations.id is none %}disabled{% endif %}>Add New</button>
         </div>
-        <div class="task-container">
-          <h3>tasklist</h3>
-          
+        <div class="summary-table-container">
+          <table class="table-bordered" id="table-bordered">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Ass. To</th>
+                <th>Type</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for task in taskslist %}
+              <tr>
+                <td class="uuid4"><a class="uuid4" href="{{ url_for('tsk_views.task_by_id', id=task.id) }}"><i class="fa-solid fa-pen-to-square">{{ task.id }}</i></a></td>
+                <td>{{ task.assign_to }}</td>
+                <td>{{ task.task_type }}</td>
+                <td>{{ task.due_date | format_date('%Y-%m-%d') }}</td>
+                <td>{{ task.status }}</td>
+                <td><a href="{{ url_for('inv_views.delete_task', id=task.id) }}"><i class="fa-solid fa-trash-can"></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
+
       </div>
 
       <footer>

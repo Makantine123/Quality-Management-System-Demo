@@ -183,8 +183,20 @@ body {
 	white-space: nowrap;
 }
 
-th {
+#table-bordered {
+	border-collapse: collapse;
+}
+
+
+th, td {
 	text-align: left;
+	border: solid 1px black;
+	padding: 5px;
+}
+
+th {
+	background-color: var(--clr-clr4);
+	color: white;
 }
 
 th:nth-child(1) {
@@ -207,6 +219,14 @@ th:nth-child(6) {
 }
 th:nth-child(7) {
 	min-width: 100px;
+}
+
+tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+tr:hover {
+	background-color: #ddd;
 }
 
 td:nth-child(1) a {

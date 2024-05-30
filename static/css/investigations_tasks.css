@@ -219,6 +219,58 @@ body {
 	border-color: transparent;
 }
 
+.uuid4 {
+	display: block;
+	width: 50px;
+	text-overflow: ellipsis;
+}
+
+#table-bordered {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+th, td {
+	text-align: left;
+	border: solid 1px black;
+	padding-left: 3px;
+}
+
+th {
+	background-color: var(--clr-clr4);
+	color: white;
+}
+
+th:nth-child(1) {
+	width: 15px;
+}
+
+td {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+td:nth-child(1) {
+	width: 20px;
+	text-overflow: ellipsis;
+	overflow-x: hidden;
+}
+
+td:nth-child(2) {
+	width: 70px;
+}
+
+td:nth-child(3) {
+	width: 100px;
+}
+
+tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+tr:hover {
+	background-color: #ddd;
+}
+
 .main {
 	grid-area: main;
 	background-color: var(--clr-clr2);

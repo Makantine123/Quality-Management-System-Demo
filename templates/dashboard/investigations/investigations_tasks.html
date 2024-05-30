@@ -30,10 +30,11 @@
       </div>
       
       <div class="content-panel-1" id="content-panel-1">
-        <form action="{{ url_for('tsk_views.save_task') }}" method="post">
+        <form action="{{ url_for('tsk_views.save_task') }}" id="task-form" method="post">
           <div class="inv-heading-title">
             <h2>Task</h2>
             <button type="button" onclick="location.href='{{ url_for('tsk_views.go_back_to_investigation_details', id=task.investigation_id) }}'">Go Back / Close</button>
+            <button type="button" onclick="clearForm('task-form')">Add New</button>
             <button type="submit">SAVE</button>
           </div>
           <div class="form-container">
@@ -91,14 +92,39 @@
         <div class="inv-heading-title">
           <h2>Task List</h2>
         </div>
+        <div class="summary-table-container">
+          <table class="summary-table" id="table-bordered">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Ass. To</th>
+                <th>Type</th>
+                <th>Due Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for task in taskslist %}
+              <tr>
+                <td class="uuid4"><a class="uuid4" href="{{ url_for('tsk_views.task_by_id', id=task.id) }}"><i class="fa-solid fa-pen-to-square">{{ task.id }}</i></a></td>
+                <td>{{ task.assign_to }}</td>
+                <td>{{ task.task_type }}</td>
+                <td>{{ task.due_date | format_date('%Y-%m-%d') }}</td>
+                <td>{{ task.status }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
       </div>
       
       <div class="content-panel-3">
-        <form action="#" method="post" enctype="multipart/form-data">
+        <form action="/investigation_task/detail/save" id="task-detail-form" method="post" enctype="multipart/form-data">
           <div class="inv-heading-title">
             <h2>Task Details</h2>
-            <button type="">Add New</button>
-            <button type="submit">SAVE</button>
+            <button type="button" onclick="clearForm('task-detail-form')" {% if taskdetails.task_id is none or taskdetails.investigation_id is none %}disabled{% endif %}>Add New</button>
+            <button type="submit" {% if taskdetails.task_id is none or taskdetails.investigation_id is none %}disabled{% endif %}>SAVE</button>
           </div>
            <div class="form-group">
             <label for="id">ID.</label>
@@ -110,15 +136,15 @@
           </div>
           <div class="form-group">
             <label for="">Date Created</label>
-            <input type="datetime-local" name="id" value="{{ taskdetails.date_created_on }}" readonly>
+            <input type="datetime-local" name="date_created_on" value="{{ taskdetails.date_created_on }}" readonly>
           </div>
           <div class="form-group">
             <label for="">Updated On</label>
-            <input type="datetime-local" name="id" value="{{ taskdetails.date_updated_on }}" readonly>
+            <input type="datetime-local" name="date_updated_on" value="{{ taskdetails.date_updated_on }}" readonly>
           </div>
           <div class="form-group">
             <label for="status">Status</label>
-             <select id="status" name="status">
+             <select id="status" name="status" required>
               <option value="Registered" {% if taskdetails.status == 'Registered' %}selected{% endif %}>Registed</option>
               <option value="In Progress" {% if taskdetails.status == 'In Progress' %}selected{% endif %}>In Progress</option>
               <option value="Completed" {% if taskdetails.status == 'Completed' %}selected{% endif %}>Completed</option>
@@ -129,23 +155,23 @@
           </div>
           <div class="form-group">
             <label for="">Investigation ID</label>
-            <input type="" name="investigation_id" value="{{ taskdetails.investigation_id }}" disabled>
+            <input type="" name="investigation_id" value="{{ taskdetails.investigation_id }}" readonly>
           </div>
            <div class="form-group">
             <label for="date_completed_on">Completed On</label>
-            <input type="datetime-local" name="date_completed_on" value="{{ taskdetails.date_completed_on }}">
+            <input type="datetime-local" name="date_completed_on" value="{{ taskdetails.date_completed_on }}" required>
           </div>
          <div class="form-group">
             <label for="attachment_name">Attachment</label>
-            <input type="file" id="file" name="attachment_name" multiple="False" value="{{ taskdetails.attachment_name }}">
+            <input type="file" id="file" name="attachment_name" multiple="False" value="{{ taskdetails.attachment_name }}" accept=".txt,.pdf,.png,.jpg,.jpeg,.xlsx,.docx" required>
           </div>
           <div class="form-group">
             <label for="attachment_comments">Attachment Comments</label>
-            <textarea type="" name="attachment_comments">{{ taskdetails.attachment_comments }}</textarea>
+            <textarea type="" name="attachment_comments" required>{{ taskdetails.attachment_comments }}</textarea>
           </div>
            <div class="form-group" id="feedback">
             <label for="">Feedback Comments</label>
-            <textarea type="" name="feedback">{{ taskdetails.feedback }}</textarea>
+            <textarea type="" name="feedback" required>{{ taskdetails.feedback }}</textarea>
           </div>
        </form>
       </div>
@@ -154,6 +180,31 @@
         <div class="inv-heading-title">
           <h2>Comments</h2> 
         </div>
+        <div class="summary-table-container">
+          <table class="summary-table" id="table-bordered">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Created</th>
+                <th>Comments</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for detail in taskdetailslist %}
+              <tr>
+                <td class="uuid4"><a class="uuid4" href="{{ url_for('tsk_views.task_details_by_id', id=detail.id) }}"><i class="fa-solid fa-pen-to-square">{{ detail.id }}</i></a></td>
+                <td>{{ detail.date_created_on | format_date('%Y-%m-%d') }}</td>
+                <td>{{ detail.feedback }}</td>
+                <td>{{ detail.status }}</td>
+                <td><a href="{{ url_for('tsk_views.delete_task_details', id=detail.id) }}"><i class="fa-solid fa-trash-can"></i></a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
       </div>
 
       <footer>
@@ -165,5 +216,6 @@
       </footer>
 
     </div>
+    <script src="../../../static/js/investigations_tasks.js"></script>
   </body>
 </html>
