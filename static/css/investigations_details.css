@@ -260,12 +260,16 @@ body {
 	overflow-x: auto;
 	overflow-y: auto;
 }
+table {
+	table-layout: fixed;
+}
 
 .uuid4 {
 	display: block;
 	width: 50px;
 	text-overflow: ellipsis;
 }
+
 
 #table-bordered {
 	border-collapse: collapse;
@@ -289,7 +293,7 @@ th:nth-child(1) {
 
 td {
 	white-space: nowrap;
-	text-overflow: ellipsis;
+	text-overflow: clip;
 }
 td:nth-child(1) {
 	width: 20px;

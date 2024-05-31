@@ -30,7 +30,7 @@ def standard_login():
 
     if not user:
         flash('Oops! User does not exist!', 'error')
-        return
+        return redirect(url_for('home'))
 
     if user.check_password(user.password_hsh, password):
         flash('Logged in successfully!', 'success')
@@ -97,7 +97,6 @@ def standard_signup():
             except Exception as e:
                 db.rollback()
                 raise e
-            print(newUser.as_dict())
             flash('Successfuly Registerd!! Please login')
             return redirect(url_for('home'))
     return render_template('home')
