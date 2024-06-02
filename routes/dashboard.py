@@ -12,5 +12,4 @@ def dashboard():
 @dash_views.route('/dashboard/investigations')
 def click_investiagtions():
     """ Investigations """
-    #return render_template('index.html')
     return redirect(url_for('inv_views.investigations_list'))
