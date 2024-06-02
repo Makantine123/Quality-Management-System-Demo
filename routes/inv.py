@@ -9,7 +9,7 @@ from models.tasks import Tasks
 inv_views = Blueprint("inv_views", __name__)
 
 
-@inv_views.route('/investigations')
+@inv_views.route('/investigations', methods=['GET', 'POST'])
 @login_required
 def investigations_list():
     """ Render Investigations Lists Template """
@@ -82,6 +82,7 @@ def delete_investigation(ir_number):
 
 
 @inv_views.route('/investigations/save_new', methods=['GET', 'POST'])
+@login_required
 def new_investigation():
     """ Save new investigation """
     form = request.form
@@ -132,6 +133,7 @@ def new_investigation():
 
 
 @inv_views.route('/investigations/create', methods=['GET', 'POST'])
+@login_required
 def create_investigation():
     """ Create a new Investigation """
     investigations = []
@@ -142,6 +144,7 @@ def create_investigation():
 
 
 @inv_views.route('/investigation_detail/save', methods=['POST', 'GET'])
+@login_required
 def save_investigation_detail():
     """ Save investigation detail """
     form = request.form
@@ -188,6 +191,7 @@ def save_investigation_detail():
 
 
 @inv_views.route('/investigations/<id>/task')
+@login_required
 def add_investigation_task(id):
     """ Add Task to Investigation """
     return redirect(url_for('tsk_views.create_task_by_investiagtion_id',
@@ -195,6 +199,7 @@ def add_investigation_task(id):
 
 
 @inv_views.route('/task/<id>/delete', methods=['POST', 'GET'])
+@login_required
 def delete_task(id):
     """ Soft delete Task by id """
     from app import Session
@@ -232,6 +237,7 @@ def delete_task(id):
 
 
 @inv_views.route('/investigation/details/<id>', methods=['POST', 'GET'])
+@login_required
 def investigation_details_by_id(id):
     """ Fetch investigation details by id """
     from app import Session

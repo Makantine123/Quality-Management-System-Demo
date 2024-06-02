@@ -3,7 +3,7 @@
 from flask import Blueprint, flash, request, render_template, redirect, url_for
 from flask_dance.contrib.github import make_github_blueprint, github
 from flask_dance.contrib.google import make_google_blueprint, google
-from flask_login import login_user
+from flask_login import login_required, login_user, logout_user
 from config import Config
 from models.users import Users
 
@@ -47,11 +47,12 @@ def standard_login():
         db.close()
 
 
-@auth_views.route("/logout")
-def logout_user():
+@auth_views.route("/logout", methods=['GET', 'POST'])
+@login_required
+def logout_current_user():
     """ Logout User """
     logout_user()
-    return redirect(url_for('app.home'))
+    return redirect(url_for('home'))
 
 
 @auth_views.route('/github_login')

@@ -1,5 +1,6 @@
 """ Investigations Routees """
 from flask import Blueprint, render_template, request, url_for, redirect
+from flask_login import login_required
 from sqlalchemy import desc
 from sqlalchemy.sql.functions import rollup
 from models.investigations import Investigations
@@ -10,6 +11,7 @@ tsk_views = Blueprint("tsk_views", __name__)
 
 
 @tsk_views.route('/investigations/<id>/task/new')
+@login_required
 def create_task_by_investiagtion_id(id):
     """ Show Investigation by id """
     from app import Session
@@ -35,6 +37,7 @@ def create_task_by_investiagtion_id(id):
 
 
 @tsk_views.route('/investigation/<id>/task/goback')
+@login_required
 def go_back_to_investigation_details(id):
     """ Return back to investigation details page """
     from app import Session
@@ -52,6 +55,7 @@ def go_back_to_investigation_details(id):
 
 
 @tsk_views.route('/investigation/task/save', methods=['POST', 'GET'])
+@login_required
 def save_task():
     """ Save Task """
     form = request.form
@@ -92,6 +96,7 @@ def save_task():
 
 
 @tsk_views.route('/tasks/<id>')
+@login_required
 def task_by_id(id):
     """ Show task by id """
     from app import Session
@@ -124,6 +129,7 @@ def task_by_id(id):
 
 
 @tsk_views.route('/investigation_task/detail/save', methods=['POST', 'GET'])
+@login_required
 def save_investigation_task_detail():
     """ Save Investigation Task Detail """
     form = request.form
@@ -174,6 +180,7 @@ def save_investigation_task_detail():
 
 
 @tsk_views.route('/task/details/<id>')
+@login_required
 def task_details_by_id(id):
     """ Fetch Task deatils by id """
     from app import Session
@@ -200,6 +207,7 @@ def task_details_by_id(id):
 
 
 @tsk_views.route('/task/details/<id>/delete', methods=['POST', 'GET'])
+@login_required
 def delete_task_details(id):
     """ Soft Deletes Task details by id """
     from app import Session
