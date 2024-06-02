@@ -3,6 +3,7 @@
 from flask import Blueprint, flash, request, render_template, redirect, url_for
 from flask_dance.contrib.github import make_github_blueprint, github
 from flask_dance.contrib.google import make_google_blueprint, google
+from flask_login import login_user
 from config import Config
 from models.users import Users
 
@@ -26,18 +27,31 @@ def standard_login():
 
     from app import Session
     db = Session()
-    user = db.query(Users).filter_by(email=email).first()
+    try:
+        user = db.query(Users).filter_by(email=email).first()
 
-    if not user:
-        flash('Oops! User does not exist!', 'error')
+        if not user:
+            flash('Oops! User does not exist!', 'error')
+            return redirect(url_for('home'))
+
+        if user.check_password(user.password_hsh, password):
+            flash('Logged in successfully!', 'success')
+            login_user(user)
+            return redirect(url_for('dash_views.dashboard'))
+
+        flash('Oops! Email and Password do not match!', 'error')
         return redirect(url_for('home'))
+    except Exception as e:
+        raise e
+    finally:
+        db.close()
 
-    if user.check_password(user.password_hsh, password):
-        flash('Logged in successfully!', 'success')
-        return redirect(url_for('dash_views.dashboard'))
 
-    flash('Oops! Email and Password do not match!', 'error')
-    return redirect(url_for('home'))
+@auth_views.route("/logout")
+def logout_user():
+    """ Logout User """
+    logout_user()
+    return redirect(url_for('app.home'))
 
 
 @auth_views.route('/github_login')

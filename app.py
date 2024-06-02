@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
 """Flask App"""
 import logging
+from flask_login import LoginManager
 from jinja2 import FileSystemLoader
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from flask import Flask, render_template
 from flask_cors import CORS
+from sqlalchemy.sql.functions import user
 from models.base_model import BaseModel
+from models.users import Users
 from routes.auth import auth_views, github_blueprint, google_blueprint
 from routes.dashboard import dash_views
 from routes.inv import inv_views
 from routes.tsk import tsk_views
 from config import Config
+
+Session = None
 
 
 def create_app():
@@ -40,13 +45,24 @@ def register_all_blueprints(app):
 def initialize_extentions(app):
     """ Initialize Flask extentions """
     app.jinja_loader = FileSystemLoader('templates')
-    # Define a custom filter function to format the date
+
     def format_date(value, format='%Y-%m-%d'):
         if value is not None:
             return value.strftime(format)
         return ''
-    # Register the custom filter with the Jinja2 environment
+
     app.jinja_env.filters['format_date'] = format_date
+    login_manager = LoginManager(app)
+    login_manager.init_app(app)
+    login_manager.login_view = 'home'
+    login_manager.login_message_category = 'login_warning'
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        """ User Loader """
+        db = Session()
+        return db.query(Users).filter_by(id=user_id).first()
+
 
 def setup_database(app):
     """ Set up the database """
@@ -88,4 +104,4 @@ def home():
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    app.run(debug=False)
+    app.run(debug=True)

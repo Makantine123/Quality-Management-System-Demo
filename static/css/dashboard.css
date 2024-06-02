@@ -28,7 +28,7 @@ body {
     grid-template-columns: 1.3fr 2fr 2fr 2fr 3fr;
     grid-template-rows: 0.6fr 1fr 1fr 2fr 0.4fr;
     grid-template-areas: 
-        "company-logo header header header header"
+        "company-logo header header header userheader"
         "sidebar content-panel-1 content-panel-2 content-panel-3 content-panel-7"
         "sidebar content-panel-4 content-panel-5 content-panel-6 content-panel-7"
         "sidebar main main main content-panel-8"
@@ -65,6 +65,27 @@ body {
 
 .heading h4 {
 	font-weight: 550;
+}
+
+.user_header {
+	grid-area: userheader;
+	justify-content: flex-end;
+	align-items: center;
+	display: flex;
+	padding: 0 20px;
+}
+
+.user_header a {
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+	color: inherit;
+	font-size: 23px;
+	font-weight: 600;
+}
+
+.user_header i {
+	padding: 0 20px;
 }
 
 .sidebar {

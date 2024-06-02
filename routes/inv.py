@@ -1,5 +1,6 @@
 """ Investigations Routees """
 from flask import Blueprint, render_template, request, url_for, redirect
+from flask_login import login_required
 from sqlalchemy import desc
 from models.investigations import Investigations
 from models.investigations_details import InvestigationsDetails
@@ -9,6 +10,7 @@ inv_views = Blueprint("inv_views", __name__)
 
 
 @inv_views.route('/investigations')
+@login_required
 def investigations_list():
     """ Render Investigations Lists Template """
     from app import Session
@@ -26,6 +28,7 @@ def investigations_list():
 
 
 @inv_views.route('/investigations/<ir_number>', methods=['POST', 'GET'])
+@login_required
 def investigation_details(ir_number):
     """ Render Template With Investigation and its details """
     from app import Session
@@ -33,6 +36,8 @@ def investigation_details(ir_number):
     try:
         investigation = db.query(Investigations).filter_by(
             ir_number=ir_number).first()
+        if not investigation:
+            return render_template('404.html'), 404
         details = db.query(InvestigationsDetails).filter_by(
             investigation_id=investigation.id).order_by(
             desc(InvestigationsDetails.date_created_on)).first()
@@ -57,6 +62,7 @@ def investigation_details(ir_number):
 
 
 @inv_views.route('/investigations/<ir_number>/delete', methods=['POST', 'GET'])
+@login_required
 def delete_investigation(ir_number):
     """ Soft Deletes Investigation by ir_number """
     from app import Session
