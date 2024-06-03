@@ -21,6 +21,7 @@ This application facilitates communication between personal and removes the need
 * Flask
 * flask-cors
 * flask_dance
+* flask_login
 * flask_wtf
 * SQLAlchemy
 * jinja2
