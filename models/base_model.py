@@ -21,7 +21,8 @@ class StatusList:
 class BaseModel:
     """Base Model Class For all Tables"""
     __abstract__ = True
-    id = Column(String(60), primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = Column(String(60), primary_key=True,
+                default=lambda: str(uuid.uuid4()))
     date_created_on = Column(DateTime, nullable=False, default=func.now())
     date_updated_on = Column(DateTime, nullable=False, default=func.now(),
                              onupdate=functions.now())

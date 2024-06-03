@@ -7,7 +7,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from flask import Flask, render_template
 from flask_cors import CORS
-from sqlalchemy.sql.functions import user
 from models.base_model import BaseModel
 from models.users import Users
 from routes.auth import auth_views, github_blueprint, google_blueprint

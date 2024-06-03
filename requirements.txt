@@ -2,6 +2,7 @@ python3
 Flask
 flask-cors
 flask_dance
+flask_login
 flask_wtf
 SQLAlchemy
 jinja2
