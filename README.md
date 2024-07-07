@@ -32,4 +32,4 @@ This application facilitates communication between personal and removes the need
 2. Install the required packages listed above
 2. Run the app python3 app.py
 3. On your browser go to http://127.0.0.1:5000
-4. SignUp to Login - Navigate to Investigations Menue
+4. Sign-Up to Login - Navigate to Investigations Menu
